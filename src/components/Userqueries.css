@@ -1,0 +1,101 @@
+.admin-queries-container {
+    position: relative;
+  }
+  
+  .notification-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .ring-symbol {
+    cursor: pointer;
+    font-size: 24px;
+    position: relative;
+    color: white; /* Initial color white */
+  }
+  
+  .ring-symbol.has-unread .unread-count {
+    color: rgb(255, 255, 255); /* Only the unread count will be red */
+  }
+  
+  .unread-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+  
+  .chatbox {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    width: 320px;
+    height: 400px;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .queries-list {
+    height: 100%;
+    overflow-y: scroll;
+    padding: 10px;
+  }
+  
+  .query-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .query-date-time {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 5px;
+  }
+  
+  .query-details {
+    font-size: 14px;
+    color: #333;
+    margin: 2px 0;
+  }
+  
+  .delete-button {
+    align-self: flex-end;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  
+  .delete-button:hover {
+    background-color: #c9302c;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .chatbox {
+      width: 100%;
+      right: 0;
+      bottom: 0;
+      height: 50%;
+      border-radius: 0;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .chatbox {
+      height: 70%;
+    }
+  }
+  

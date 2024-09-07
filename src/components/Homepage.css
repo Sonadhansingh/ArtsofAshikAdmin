@@ -1,0 +1,92 @@
+.homepage-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 5%;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000; /* Dark background */
+  color: #fff; /* White text */
+}
+
+.homepage-title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #fff; /* White text */
+  text-transform: uppercase;
+}
+
+.homepage-form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  gap: 15px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0px 0px 8px rgb(255 255 255);
+  padding: 3%;
+  background-color: #000;
+}
+
+.homepage-form input[type="file"],
+.homepage-form input[type="text"] {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #181818; 
+  color: #bbbbbb; 
+}
+
+.homepage-form button {
+  padding: 12px 20px;
+  background-color: #6d6875;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: flex-start;
+}
+
+.homepage-form button:hover {
+  background-color: #6d6875;
+}
+
+.video-container {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-container video {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .homepage-form {
+    width: 90%;
+    border: none;
+    padding: 5%;
+  }
+  
+}

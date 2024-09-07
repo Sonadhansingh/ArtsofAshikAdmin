@@ -1,0 +1,74 @@
+.image-roll-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-roll-body{
+    width: 60%;
+    box-shadow: 0px 0px 8px rgb(255 255 255);
+    padding: 3%;
+}
+
+.image-roll-body input{
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #181818;
+    color: #bbbbbb;
+}
+
+.upload-image-button{
+  background-color: 6d6875;
+}
+
+
+.upload-image-button{
+    margin-top: 2%;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8em, 1fr));
+    gap: 3em;
+    padding: 4em;
+  }
+  
+  .image-container {
+    position: relative;
+    width: 100%;
+    height: 10em;
+    overflow: hidden;
+  }
+  
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .delete-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .delete-button:hover{
+    background-color: black;
+  }
+  
+  .image-container:hover .delete-button {
+    display: block;
+  }
+  
