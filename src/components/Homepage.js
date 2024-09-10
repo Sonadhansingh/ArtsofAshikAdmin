@@ -8,7 +8,12 @@ const Homepage = () => {
   const [video, setVideo] = useState(null);
   const [videoUrl, setVideoUrl] = useState('');
   const [bigText, setBigText] = useState('');
-  const [links, setLinks] = useState({ generalTitle: '', generalUrl: '', instaTitle: '', instaUrl: '' });
+  const [links, setLinks] = useState({
+    generalTitle: '',
+    generalUrl: '',
+    instaTitle: '',
+    instaUrl: '',
+  });
 
   useEffect(() => {
     fetchLatestVideo();
@@ -63,7 +68,7 @@ const Homepage = () => {
         },
       });
       Swal.fire('Success', 'Video uploaded successfully!', 'success');
-      fetchLatestVideo();
+      setVideoUrl(response.data.videoUrl); // Update videoUrl with the response data
     } catch (error) {
       console.error('Error uploading video:', error);
       Swal.fire('Error', 'There was an issue uploading the video', 'error');
@@ -73,9 +78,14 @@ const Homepage = () => {
   const handleSubmitText = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/bigText`, { text: bigText });
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/link`, { ...links });
+      const bigTextResponse = await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/bigText`, { text: bigText });
+      const linksResponse = await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/link`, { ...links });
+      
       Swal.fire('Success', 'Content updated successfully!', 'success');
+      
+      // Optionally, you can handle the response if needed
+      console.log('Big Text Response:', bigTextResponse.data);
+      console.log('Links Response:', linksResponse.data);
     } catch (error) {
       console.error('Error updating content:', error);
       Swal.fire('Error', 'Failed to update content.', 'error');
@@ -105,60 +115,59 @@ const Homepage = () => {
           </div>
         )}
 
-<form onSubmit={handleSubmitText} className="homepage-form">
-        <div className="form-group">
-          <label>Big Text</label>
-          <input
-            type="text"
-            value={bigText}
-            onChange={(e) => setBigText(e.target.value)}
-            required
-            placeholder="Enter big text"
-          />
-        </div>
+        <form onSubmit={handleSubmitText} className="homepage-form">
+          <div className="form-group">
+            <label>Big Text</label>
+            <input
+              type="text"
+              value={bigText}
+              onChange={(e) => setBigText(e.target.value)}
+              required
+              placeholder="Enter big text"
+            />
+          </div>
 
-        <div className="form-group">
-          <label>Press / General inquiries</label>
-          <input
-            type="text"
-            placeholder="Title"
-            value={links.generalTitle}
-            onChange={(e) => setLinks({ ...links, generalTitle: e.target.value })}
-            required
-          />
-          <input
-            type="text"
-            placeholder="URL"
-            value={links.generalUrl}
-            onChange={(e) => setLinks({ ...links, generalUrl: e.target.value })}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label>Press / General inquiries</label>
+            <input
+              type="text"
+              placeholder="Title"
+              value={links.generalTitle}
+              onChange={(e) => setLinks({ ...links, generalTitle: e.target.value })}
+              required
+            />
+            <input
+              type="text"
+              placeholder="URL"
+              value={links.generalUrl}
+              onChange={(e) => setLinks({ ...links, generalUrl: e.target.value })}
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label>Instagram</label>
-          <input
-            type="text"
-            placeholder="Title"
-            value={links.instaTitle}
-            onChange={(e) => setLinks({ ...links, instaTitle: e.target.value })}
-            required
-          />
-          <input
-            type="text"
-            placeholder="URL"
-            value={links.instaUrl}
-            onChange={(e) => setLinks({ ...links, instaUrl: e.target.value })}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label>Instagram</label>
+            <input
+              type="text"
+              placeholder="Title"
+              value={links.instaTitle}
+              onChange={(e) => setLinks({ ...links, instaTitle: e.target.value })}
+              required
+            />
+            <input
+              type="text"
+              placeholder="URL"
+              value={links.instaUrl}
+              onChange={(e) => setLinks({ ...links, instaUrl: e.target.value })}
+              required
+            />
+          </div>
 
-        <button type="submit">Update</button>
-      </form>
+          <button type="submit">Update</button>
+        </form>
       </div>
 
       <ImageRoll/>
-
     </>
   );
 };

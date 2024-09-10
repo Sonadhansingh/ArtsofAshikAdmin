@@ -10,7 +10,6 @@ const Character = () => {
   const [mainImage, setMainImage] = useState(null);
   const [images, setImages] = useState([]);
   const [content, setContent] = useState([]);
-  const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
   const [editId, setEditId] = useState(null);
 
@@ -81,7 +80,6 @@ const Character = () => {
       setEditId(null);
     } catch (error) {
       console.error('Error uploading content:', error);
-      setError('Failed to upload content');
     }
   };
 

@@ -10,7 +10,6 @@ const Environment = () => {
   const [mainImage, setMainImage] = useState(null);
   const [images, setImages] = useState([]);
   const [environment, setEnvironment] = useState([]);
-  const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
   const [editId, setEditId] = useState(null);
 
@@ -81,7 +80,7 @@ const Environment = () => {
       setEditId(null);
     } catch (error) {
       console.error('Error uploading environment:', error);
-      setError('Failed to upload environment');
+
     }
   };
 
