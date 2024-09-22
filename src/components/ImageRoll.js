@@ -80,7 +80,7 @@ const ImageRoll = () => {
         {images.map(image => (
           <div key={image._id} className="image-container">
             <img
-              src={`${process.env.REACT_APP_API_URL}/${image.path}`}
+              src={`${process.env.REACT_APP_API_URL}/uploads/${image.path}`}
               alt={image.filename}
               className="image"
             />
