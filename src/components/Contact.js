@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useDropzone } from 'react-dropzone';
 import './Contact.css';
 
 const Contact = () => {
   const [heading, setHeading] = useState('');
   const [contactUrl, setContactUrl] = useState('');
-  const [logo, setLogo] = useState(null);
   const [contacts, setContacts] = useState([]);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [mainId, setMainId] = useState('');
@@ -33,7 +31,6 @@ const Contact = () => {
     }
   };
 
-  
   const fetchContactDetails = async () => {
     setLoading(true);
     try {
@@ -48,11 +45,6 @@ const Contact = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-
-  const handleLogoChange = (files) => {
-    setLogo(files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -73,29 +65,19 @@ const Contact = () => {
     const formData = new FormData();
     formData.append('heading', heading);
     formData.append('contactUrl', contactUrl);
-    if (logo) formData.append('logo', logo);
 
     try {
       if (editing) {
-        const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/contact/${editId}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/contact/${editId}`, formData);
         setContacts(contacts.map(item => item._id === editId ? response.data : item));
         Swal.fire('Success', 'Contact updated successfully!', 'success');
       } else {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/contact`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/contact`, formData);
         setContacts([...contacts, response.data]);
         Swal.fire('Success', 'Contact added successfully!', 'success');
       }
       setHeading('');
       setContactUrl('');
-      setLogo(null);
       setEditing(false);
       setEditId(null);
     } catch (error) {
@@ -129,15 +111,10 @@ const Contact = () => {
     try {
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/contact/details`, contactDetailsData);
       setExistingContactDetails(response.data);
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Contact details updated successfully!',
-        showConfirmButton: true,
-        timer: 1500
-      });
+      Swal.fire('Success', 'Contact details updated successfully!', 'success');
     } catch (error) {
       console.error('Error updating contact details:', error);
+
       Swal.fire({
         icon: 'error',
         title: 'Failed to update contact details',
@@ -146,6 +123,9 @@ const Contact = () => {
       });
     } finally {
       setLoading(false);
+
+      Swal.fire('Error', 'Failed to update contact details', 'error');
+
     }
   };
 
@@ -172,22 +152,18 @@ const Contact = () => {
         try {
           await axios.delete(`${process.env.REACT_APP_API_URL}/api/contact/${id}`);
           setContacts(contacts.filter((c) => c._id !== id));
-          Swal.fire('Deleted!', 'The contact has been deleted.', 'success', {timer : 1500});
+          Swal.fire('Deleted!', 'The contact has been deleted.', 'success');
         } catch (error) {
           console.error('Error deleting contact:', error);
           Swal.fire('Error', 'Failed to delete contact.', 'error', { timer : 1500});
         } finally {
           setLoading(false);
+          Swal.fire('Error', 'Failed to delete contact.', 'error');
+
         }
       }
     });
   };
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (acceptedFiles) => handleLogoChange(acceptedFiles),
-    accept: 'image/*',
-    multiple: false
-  });
 
   return (
     <div className="contact-container">
@@ -200,7 +176,6 @@ const Contact = () => {
         <div>
           <input type="text" value={contactUrl} onChange={(e) => setContactUrl(e.target.value)} placeholder="Contact URL" required />
         </div>
-    
         <button type="submit">{editing ? 'Update' : 'Add'}</button>
       </form>
 
@@ -211,15 +186,6 @@ const Contact = () => {
         ) : (
           contacts.map((item) => (
             <div key={item._id} className="contact-item">
-              <div>
-                {item.logo && (
-                  <img
-                    src={`${process.env.REACT_APP_API_URL}/${item.logo}`}
-                    alt="Logo"
-                    style={{ width: '100px', height: '100px' }}
-                  />
-                )}
-              </div>
               <p><strong>Title:</strong> {item.heading}</p>
               <p><strong>Contact URL:</strong> <a href={item.contactUrl} target="_blank" rel="noopener noreferrer">{item.contactUrl}</a></p>
               <button onClick={() => handleEdit(item._id)}>Edit</button>
@@ -241,17 +207,11 @@ const Contact = () => {
       </form>
 
       <div>
-            <p className="contact-title">Contact Details</p>
-            <p>
-              {`Phone Number: ${existingContactDetails?.phoneNumber || 'Loading...'}`}
-            </p>
-            <p>
-              {`Main ID: ${existingContactDetails?.mainId || 'Loading...'}`}
-            </p>
-          </div>
+        <p className="contact-title">Contact Details</p>
+        <p>{`Phone Number: ${existingContactDetails?.phoneNumber || 'Loading...'}`}</p>
+        <p>{`Main ID: ${existingContactDetails?.mainId || 'Loading...'}`}</p>
+      </div>
     </div>
-
-    
   );
 };
 

@@ -106,6 +106,7 @@ const Environment = () => {
       Swal.fire('Error', 'Failed to upload content.', 'error');
     } finally {
       setUploading(false);
+      console.error('Error uploading environment:', error);
     }
   };
 

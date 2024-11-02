@@ -9,7 +9,7 @@ const Homepage = () => {
   const [videoUrl, setVideoUrl] = useState('');
   const [bigText, setBigText] = useState('');
   const [links, setLinks] = useState({ generalTitle: '', generalUrl: '', instaTitle: '', instaUrl: '' });
-  const [loading, setLoading] = useState(false);  // <-- Added loading state
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchLatestVideo();
@@ -96,6 +96,7 @@ const Homepage = () => {
       // Set the video URL to the uploaded video URL
       setVideoUrl(response.data.videoUrl);
       Swal.fire('Success', 'Video uploaded successfully!', 'success');
+      fetchLatestVideo();
     } catch (error) {
       console.error('Error uploading video:', error);
       Swal.fire('Error', 'Failed to upload video.', 'error');
@@ -136,9 +137,14 @@ const Homepage = () => {
     });
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/bigText`, { text: bigText });
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/link`, { ...links });
+      const bigTextResponse = await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/bigText`, { text: bigText });
+      const linksResponse = await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/link`, { ...links });
+      
       Swal.fire('Success', 'Content updated successfully!', 'success');
+      
+      // Optionally, you can handle the response if needed
+      console.log('Big Text Response:', bigTextResponse.data);
+      console.log('Links Response:', linksResponse.data);
     } catch (error) {
       console.error('Error updating content:', error);
       Swal.fire('Error', 'Failed to update content.', 'error');
@@ -224,7 +230,8 @@ const Homepage = () => {
         </form>
       </div>
 
-      <ImageRoll />
+      <ImageRoll/>
+
     </>
   );
 };

@@ -11,11 +11,11 @@ const Character = () => {
   const [images, setImages] = useState([]);
   const [videos, setVideos] = useState([]);
   const [content, setContent] = useState([]);
-  const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
   const [editId, setEditId] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState([]);
 
   useEffect(() => {
     fetchContent();
