@@ -14,6 +14,7 @@ const Contact = () => {
   const [existingContactDetails, setExistingContactDetails] = useState(null);
   const [editing, setEditing] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchContacts();
@@ -21,16 +22,20 @@ const Contact = () => {
   }, []);
 
   const fetchContacts = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/contact`);
       setContacts(response.data);
     } catch (error) {
       console.error('Error fetching contacts:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   
   const fetchContactDetails = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/contact/details`);
       if (response.data) {
@@ -40,6 +45,8 @@ const Contact = () => {
       }
     } catch (error) {
       console.error('Error fetching contact details:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,6 +57,19 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    // Show SweetAlert loading popup
+    Swal.fire({
+      title: 'Uploading...',
+      text: 'Please wait while your content is being uploaded.',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     const formData = new FormData();
     formData.append('heading', heading);
     formData.append('contactUrl', contactUrl);
@@ -81,11 +101,26 @@ const Contact = () => {
     } catch (error) {
       console.error('Error uploading contact:', error);
       Swal.fire('Error', 'Failed to upload contact.', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmitDetails = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+     // Show SweetAlert loading popup
+     Swal.fire({
+      title: 'Uploading...',
+      text: 'Please wait while your content is being uploaded.',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    
     const contactDetailsData = {
       phoneNumber,
       mainId
@@ -109,6 +144,8 @@ const Contact = () => {
         text: error.response?.data?.message || 'An error occurred while updating contact details',
         timer: 1500
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -131,6 +168,7 @@ const Contact = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        setLoading(true);
         try {
           await axios.delete(`${process.env.REACT_APP_API_URL}/api/contact/${id}`);
           setContacts(contacts.filter((c) => c._id !== id));
@@ -138,6 +176,8 @@ const Contact = () => {
         } catch (error) {
           console.error('Error deleting contact:', error);
           Swal.fire('Error', 'Failed to delete contact.', 'error', { timer : 1500});
+        } finally {
+          setLoading(false);
         }
       }
     });

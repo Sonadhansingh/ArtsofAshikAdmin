@@ -9,6 +9,7 @@ const Homepage = () => {
   const [videoUrl, setVideoUrl] = useState('');
   const [bigText, setBigText] = useState('');
   const [links, setLinks] = useState({ generalTitle: '', generalUrl: '', instaTitle: '', instaUrl: '' });
+  const [loading, setLoading] = useState(false);  // <-- Added loading state
 
   useEffect(() => {
     fetchLatestVideo();
@@ -16,20 +17,29 @@ const Homepage = () => {
     fetchLinks();
   }, []);
 
+  // Function to fetch the latest video URL from the server
   const fetchLatestVideo = async () => {
+    setLoading(true);  // <-- Start loading when fetching
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/video/latest`);
-      setVideoUrl(response.data.videoUrl);
+      if (response.data.videos.length > 0) {
+        setVideoUrl(response.data.videos[0]); // Set the latest video URL
+      }
     } catch (error) {
       console.error('Error fetching the latest video:', error);
+    } finally {
+      setLoading(false);  // <-- Stop loading when fetch is complete
     }
   };
 
+  // Function to handle file selection for video upload
   const handleVideoChange = (e) => {
     setVideo(e.target.files[0]);
   };
 
+  // Fetching big text from the server
   const fetchBigText = async () => {
+    setLoading(true);  // <-- Start loading when fetching
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/textLink/bigText`);
       if (response.data.length > 0) {
@@ -37,10 +47,14 @@ const Homepage = () => {
       }
     } catch (error) {
       console.error('Error fetching bigText:', error);
+    } finally {
+      setLoading(false);  // <-- Stop loading when fetch is complete
     }
   };
 
+  // Fetching links from the server
   const fetchLinks = async () => {
+    setLoading(true);  // <-- Start loading when fetching
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/textLink/link`);
       if (response.data.length > 0) {
@@ -48,11 +62,27 @@ const Homepage = () => {
       }
     } catch (error) {
       console.error('Error fetching links:', error);
+    } finally {
+      setLoading(false);  // <-- Stop loading when fetch is complete
     }
   };
 
-  const handleSubmit = async (e) => {
+   // Function to handle video upload
+   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);  // <-- Start loading when fetching
+
+    // Show SweetAlert loading popup
+    Swal.fire({
+      title: 'Uploading...',
+      text: 'Please wait while your content is being uploaded.',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     const formData = new FormData();
     formData.append('video', video);
 
@@ -62,16 +92,49 @@ const Homepage = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+      // Set the video URL to the uploaded video URL
+      setVideoUrl(response.data.videoUrl);
       Swal.fire('Success', 'Video uploaded successfully!', 'success');
-      fetchLatestVideo();
     } catch (error) {
       console.error('Error uploading video:', error);
-      Swal.fire('Error', 'There was an issue uploading the video', 'error');
+      Swal.fire('Error', 'Failed to upload video.', 'error');
+    } finally {
+      setLoading(false);  // <-- Stop loading when fetch is complete
     }
   };
 
+  // Function to handle video deletion
+  const handleDelete = async () => {
+    setLoading(true);  // <-- Start loading when fetching
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/video/delete`);
+      setVideoUrl('');  // Clear the video URL after deletion
+      Swal.fire('Deleted', 'Video deleted successfully!', 'success');
+    } catch (error) {
+      console.error('Error deleting video:', error);
+      Swal.fire('Error', 'Failed to delete video.', 'error');
+    } finally {
+      setLoading(false);  // <-- Stop loading when fetch is complete
+    }
+  }; 
+
+  // Function to submit big text and links
   const handleSubmitText = async (e) => {
     e.preventDefault();
+    setLoading(true);  // <-- Start loading when fetching
+
+    // Show SweetAlert loading popup
+    Swal.fire({
+      title: 'Uploading...',
+      text: 'Please wait while your content is being uploaded.',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/bigText`, { text: bigText });
       await axios.post(`${process.env.REACT_APP_API_URL}/api/textLink/link`, { ...links });
@@ -79,6 +142,8 @@ const Homepage = () => {
     } catch (error) {
       console.error('Error updating content:', error);
       Swal.fire('Error', 'Failed to update content.', 'error');
+    } finally {
+      setLoading(false);  // <-- Stop loading when fetch is complete
     }
   };
 
@@ -96,69 +161,70 @@ const Homepage = () => {
           />
           <button type="submit">Upload Video</button>
         </form>
+        
         {videoUrl && (
           <div className="video-container">
-            <video controls autoPlay loop muted>
-              <source src={`${process.env.REACT_APP_API_URL}${videoUrl}`} type="video/mp4" />
+            <video autoPlay loop muted>
+              <source src={videoUrl} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
+            <button onClick={handleDelete}>Delete Video</button>
           </div>
         )}
 
-<form onSubmit={handleSubmitText} className="homepage-form">
-        <div className="form-group">
-          <label>Big Text</label>
-          <input
-            type="text"
-            value={bigText}
-            onChange={(e) => setBigText(e.target.value)}
-            required
-            placeholder="Enter big text"
-          />
-        </div>
+        <form onSubmit={handleSubmitText} className="homepage-form">
+          <div className="form-group">
+            <label>Big Text</label>
+            <input
+              type="text"
+              value={bigText}
+              onChange={(e) => setBigText(e.target.value)}
+              required
+              placeholder="Enter big text"
+            />
+          </div>
 
-        <div className="form-group">
-          <label>Press / General inquiries</label>
-          <input
-            type="text"
-            placeholder="Title"
-            value={links.generalTitle}
-            onChange={(e) => setLinks({ ...links, generalTitle: e.target.value })}
-            required
-          />
-          <input
-            type="text"
-            placeholder="URL"
-            value={links.generalUrl}
-            onChange={(e) => setLinks({ ...links, generalUrl: e.target.value })}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label>Press / General inquiries</label>
+            <input
+              type="text"
+              placeholder="Title"
+              value={links.generalTitle}
+              onChange={(e) => setLinks({ ...links, generalTitle: e.target.value })}
+              required
+            />
+            <input
+              type="text"
+              placeholder="URL"
+              value={links.generalUrl}
+              onChange={(e) => setLinks({ ...links, generalUrl: e.target.value })}
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label>Instagram</label>
-          <input
-            type="text"
-            placeholder="Title"
-            value={links.instaTitle}
-            onChange={(e) => setLinks({ ...links, instaTitle: e.target.value })}
-            required
-          />
-          <input
-            type="text"
-            placeholder="URL"
-            value={links.instaUrl}
-            onChange={(e) => setLinks({ ...links, instaUrl: e.target.value })}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label>Instagram</label>
+            <input
+              type="text"
+              placeholder="Title"
+              value={links.instaTitle}
+              onChange={(e) => setLinks({ ...links, instaTitle: e.target.value })}
+              required
+            />
+            <input
+              type="text"
+              placeholder="URL"
+              value={links.instaUrl}
+              onChange={(e) => setLinks({ ...links, instaUrl: e.target.value })}
+              required
+            />
+          </div>
 
-        <button type="submit">Update</button>
-      </form>
+          <button type="submit">Update</button>
+        </form>
       </div>
 
-      <ImageRoll/>
-
+      <ImageRoll />
     </>
   );
 };

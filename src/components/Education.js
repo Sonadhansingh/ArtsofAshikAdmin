@@ -10,23 +10,30 @@ function Education() {
   const [currentExperience, setCurrentExperience] = useState({ position: '', company: '', years: '', description: '' });
   const [editingEducation, setEditingEducation] = useState(false);
   const [editingExperience, setEditingExperience] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchEducations = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/education`);
         setEducations(response.data);
       } catch (error) {
         console.error('Error fetching educations:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     const fetchExperiences = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/experience`);
         setExperiences(response.data);
       } catch (error) {
         console.error('Error fetching experiences:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -45,6 +52,18 @@ function Education() {
 
   const handleSubmit = async (e, current, setCurrent, setEntries, entries, isEditing, setEditing, type) => {
     e.preventDefault();
+    setLoading(true);
+
+     // Show SweetAlert loading popup
+     Swal.fire({
+      title: 'Uploading...',
+      text: 'Please wait while your content is being uploaded.',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
     try {
       let response;
@@ -63,6 +82,8 @@ function Education() {
     } catch (error) {
       console.error(`Error ${isEditing ? 'updating' : 'adding'} ${type}:`, error);
       Swal.fire('Error', `Failed to ${isEditing ? 'update' : 'add'} ${type}.`, 'error', { timer: 1500 });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,6 +103,7 @@ function Education() {
       confirmButtonText: 'Yes, delete it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        setLoading(true);
         try {
           await axios.delete(`${process.env.REACT_APP_API_URL}/api/${type}/${id}`);
           setEntries(entries.filter(entry => entry._id !== id));
@@ -89,6 +111,8 @@ function Education() {
         } catch (error) {
           console.error(`Error deleting ${type}:`, error);
           Swal.fire('Error', `Failed to delete ${type}.`, 'error', { timer: 1500 });
+        } finally {
+          setLoading(false);
         }
       }
     });

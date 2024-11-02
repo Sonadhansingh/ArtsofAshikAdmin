@@ -108,7 +108,7 @@
 .character-item img {
   max-width: 200px;
   height: auto;
-  max-height: 200px;
+  /* max-height: 200px; */
   object-fit: cover;
   border-radius: 4px;
   margin: 1%;
@@ -186,5 +186,29 @@
   justify-content: center;
   margin-top: 5%;
 }
+
+}
+
+.image-video-combine{
+  display: flex;
+  justify-content: center;
+  gap: 5%;
+}
+
+.admin-character-image{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.admin-character-image img{
+  width: 200px;
+  height: 200px;
+  margin: 5px;
+  object-fit: cover;
+}
+  
+.content-list{
 
 }
