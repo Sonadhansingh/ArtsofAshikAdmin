@@ -162,6 +162,13 @@
   margin-top: 1%;
 }
 
+.character-actions{
+  display: flex;
+  gap: 10%;
+  justify-content: center;
+  align-items: center;
+}
+
 @media (max-width: 768px) {
   .character-form {
     width: 90%;

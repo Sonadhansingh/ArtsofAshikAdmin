@@ -119,6 +119,8 @@ const Competence = () => {
   });
 
   return (
+    <>
+    {loading && <div className="loading-spinner"></div>}
     <div className="competence-container">
       <h1 className="competence-title">{editing ? 'Update Competence' : 'Add Competence'}</h1>
       
@@ -166,6 +168,7 @@ const Competence = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

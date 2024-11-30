@@ -112,6 +112,7 @@ function Aboutpage() {
 
   return (
     <>
+      {loading && <div className="loading-spinner"></div>}
       <form onSubmit={handleSubmit} className="update-about-container">
         <h1 className='about-title'>About</h1>
         <div className="form-group">

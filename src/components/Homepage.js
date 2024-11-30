@@ -155,6 +155,7 @@ const Homepage = () => {
 
   return (
     <>
+      {loading && <div className="loading-spinner"></div>}
       <div className="homepage-container">
         <h1 className="homepage-title">Admin Home Page</h1>
         <form className="homepage-form" onSubmit={handleSubmit}>

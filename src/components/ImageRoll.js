@@ -106,6 +106,7 @@ const ImageRoll = () => {
 
   return (
     <>
+     {loading && <div className="loading-spinner"></div>}
       <div className='image-roll-container'>
         <div className='image-roll-body'>
           <strong>Image Roll</strong>

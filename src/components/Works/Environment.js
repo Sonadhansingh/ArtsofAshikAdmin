@@ -223,7 +223,7 @@ const Environment = () => {
         </form>
       )}
       <div className="content-list">
-        <h2>Environment List</h2>
+        <h2 className='environment-title'>Environment List</h2>
         {content.map((item) => (
           <div key={item._id} className="environment-item">
            <h3>{item.title}</h3>
@@ -244,7 +244,7 @@ const Environment = () => {
             {item.images && item.images.length > 0 && (
               <div className="admin-character-image">
                 {item.images.map((image, index) => (
-                  <img key={index} src={image} alt={`Script Image ${index + 1}`} />
+                  <img key={index} src={image} alt={`Script ${index + 1}`} />
                 ))}
               </div>
             )}

@@ -132,6 +132,8 @@ function Scripts() {
   };
 
   return (
+    <>
+    {loading && <div className="loading-spinner"></div>}
     <div className="script-manager">
       <h1 className="script-title">{editing ? 'Update Script' : 'Add Script'}</h1>
       <form onSubmit={handleSubmit} className="script-form">
@@ -175,6 +177,7 @@ function Scripts() {
         ))}
       </ul>
     </div>
+    </>
   );
 }
 

@@ -221,7 +221,7 @@ const Character = () => {
         </form>
       )}
       <div className="content-list">
-        <h2>Character List</h2>
+        <h2 className='character-title'>Character List</h2>
         {content.map((item) => (
           <div key={item._id} className="character-item">
             <h3>{item.title}</h3>
@@ -242,7 +242,7 @@ const Character = () => {
             {item.images && item.images.length > 0 && (
               <div className="admin-character-image">
                 {item.images.map((image, index) => (
-                  <img key={index} src={image} alt={`Script Image ${index + 1}`} />
+                  <img key={index} src={image} alt={`Script ${index + 1}`} />
                 ))}
               </div>
             )}

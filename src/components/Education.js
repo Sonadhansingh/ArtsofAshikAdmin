@@ -119,6 +119,8 @@ function Education() {
   };
 
   return (
+    <>
+    {loading && <div className="loading-spinner"></div>}
     <div className="container">
       <h2 className='education-title'>Education and Experience</h2>
 
@@ -170,6 +172,7 @@ function Education() {
         </ul>
       </div>
     </div>
+    </>
   );
 }
 

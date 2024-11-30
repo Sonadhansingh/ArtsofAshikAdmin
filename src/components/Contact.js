@@ -166,6 +166,8 @@ const Contact = () => {
   };
 
   return (
+    <>
+    {loading && <div className="loading-spinner"></div>}
     <div className="contact-container">
       <h1 className="contact-title">{editing ? 'Update Contact' : 'Add Contact'}</h1>
       <form className="contact-form" onSubmit={handleSubmit}>
@@ -212,6 +214,7 @@ const Contact = () => {
         <p>{`Main ID: ${existingContactDetails?.mainId || 'Loading...'}`}</p>
       </div>
     </div>
+    </>
   );
 };
 
